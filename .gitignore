@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# InsightFace model downloads (large binaries, fetched on first run)
+models/*
+!models/.gitkeep
+
+# Face image data (personal/biometric data + large binary files)
+data/reference/*
+data/test/*
+!data/reference/.gitkeep
+!data/test/.gitkeep
+
+# Evaluation artifacts
+pairs.csv
+*.log
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
