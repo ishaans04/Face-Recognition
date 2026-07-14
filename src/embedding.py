@@ -12,7 +12,7 @@ def load_model():
     global _app
     if _app is None:
         _app = FaceAnalysis(name=config.MODEL_NAME, root=config.MODELS_DIR)
-        _app.prepare(ctx_id=config.CTX_ID, det_size=config.DET_SIZE)
+        _app.prepare(ctx_id=config.CTX_ID, det_size=config.DET_SIZE, det_thresh=config.DET_THRESH)
     return _app
 
 

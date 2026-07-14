@@ -22,10 +22,14 @@ def build_reference_embedding(reference_dir):
         try:
             embeddings.append(embedding_module.get_embedding(image))
         except ValueError as exc:
-            print(f"Skipping {path}: {exc}", file=sys.stderr)
+            h, w = image.shape[:2]
+            print(f"Skipping {path} ({w}x{h}): {exc}", file=sys.stderr)
 
     if not embeddings:
-        raise ValueError(f"No usable faces found in reference set: {reference_dir}")
+        raise ValueError(
+            f"No usable faces found in reference set: {reference_dir} "
+            "(see 'Skipping ...' lines above for the reason per image)"
+        )
 
     return aggregator.aggregate_embeddings(embeddings)
 

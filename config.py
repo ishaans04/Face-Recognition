@@ -11,4 +11,5 @@ MODEL_NAME = "buffalo_l"
 IMAGE_SIZE = (112, 112)
 
 DET_SIZE = (640, 640)
+DET_THRESH = 0.4  # lower (e.g. 0.3) if real faces are still being missed
 CTX_ID = -1  # -1 for CPU, >=0 for GPU device id

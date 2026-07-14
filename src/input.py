@@ -2,6 +2,7 @@
 import os
 
 import cv2
+import numpy as np
 
 SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp"}
 
@@ -9,7 +10,12 @@ SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp"}
 def load_image(path):
     if not os.path.isfile(path):
         raise FileNotFoundError(f"Image not found: {path}")
-    image = cv2.imread(path)
+
+    # cv2.imread() silently fails on Windows for paths/filenames containing
+    # non-ASCII characters (returns None instead of raising). Reading the
+    # bytes ourselves and decoding avoids that failure mode.
+    data = np.fromfile(path, dtype=np.uint8)
+    image = cv2.imdecode(data, cv2.IMREAD_COLOR)
     if image is None:
         raise ValueError(f"Failed to read image (unsupported or corrupt file): {path}")
     return image
