@@ -13,8 +13,10 @@ models/*
 # Face image data (personal/biometric data + large binary files)
 data/reference/*
 data/test/*
+data/dataset/*
 !data/reference/.gitkeep
 !data/test/.gitkeep
+!data/dataset/.gitkeep
 
 # Evaluation artifacts
 pairs.csv

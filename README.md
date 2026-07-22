@@ -13,7 +13,8 @@ INPUT -> PREPROCESS -> EMBEDDING -> AGGREGATION -> MATCHING -> EVALUATION -> OUT
 - **preprocess.py** — lightweight sanity checks (detection/alignment is handled internally by InsightFace)
 - **embedding.py** — loads the ArcFace model and extracts 512-d face embeddings
 - **aggregator.py** — mean-aggregates multiple reference embeddings into one
-- **matcher.py** — cosine similarity + threshold decision
+- **matcher.py** — cosine similarity + threshold decision (1:1 `verify`) and gallery search (1:N `identify`)
+- **gallery.py** — saves/loads a cached multi-identity embedding gallery (`.npz`)
 - **evaluator.py** — accuracy, precision, recall, F1, confusion matrix
 
 ## Setup
@@ -23,6 +24,8 @@ pip install -r requirements.txt
 ```
 
 ## Usage
+
+### 1:1 verification
 
 Verify a single test image against a reference set (2-3 images of the same person):
 
@@ -37,6 +40,30 @@ where `label` is `1` for same identity and `0` for different):
 python main.py evaluate --pairs-csv pairs.csv
 ```
 
+### 1:N identification
+
+Lay out a dataset of N different people, one subfolder per identity, each with 2-3+ images:
+
+```
+data/dataset/
+  alice/photo1.jpg ...
+  bob/photo1.jpg ...
+```
+
+Embed the whole dataset once into a cached gallery:
+
+```
+python main.py build-gallery --dataset-dir data/dataset/ --output models/gallery.npz
+```
+
+Then identify a test image against everyone in the gallery — prints the best-matching
+identity, a confidence score, and a ranked top-k list (`Unknown` if the best score doesn't
+clear the threshold):
+
+```
+python main.py identify --gallery models/gallery.npz --test-image data/test/photo.jpg --top-k 5
+```
+
 ## Configuration
 
 See `config.py`:
@@ -44,3 +71,5 @@ See `config.py`:
 - `THRESHOLD` — cosine similarity cutoff for a match (default `0.6`)
 - `MODEL_NAME` — InsightFace model pack (default `buffalo_l`)
 - `CTX_ID` — `-1` for CPU, `>=0` for a GPU device id
+- `TOP_K` — default number of ranked matches returned by `identify` (default `5`)
+- `DATASET_DIR` / `GALLERY_PATH` — default dataset and gallery-cache locations for `build-gallery`/`identify`
