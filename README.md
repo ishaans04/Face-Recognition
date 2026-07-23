@@ -64,6 +64,12 @@ clear the threshold):
 python main.py identify --gallery models/gallery.npz --test-image data/test/photo.jpg --top-k 5
 ```
 
+## Running on Google Colab
+
+`colab/face_recognition_colab.ipynb` runs the same pipeline on Colab (with optional free GPU),
+persisting `data/` and `models/` across sessions via a Google Drive mount. Upload this notebook
+to [Colab](https://colab.research.google.com/) or open it via GitHub, then follow the cells in order.
+
 ## Configuration
 
 See `config.py`:
